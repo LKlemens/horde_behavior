@@ -7,7 +7,22 @@ defmodule HordeBehavior.Application do
 
   @impl true
   def start(_type, _args) do
+    topologies = [
+      local_epmd: [
+        strategy: Elixir.Cluster.Strategy.LocalEpmd
+      ]
+    ]
+
     children = [
+      {Horde.Registry, [name: Registry.Boom, keys: :unique, members: :auto]},
+      {Horde.Registry, [name: Registry.State, keys: :unique, members: :auto]},
+      {Cluster.Supervisor, [topologies, [name: CsBonusesService.ClusterSupervisor]]},
+      %{
+        id: Agent,
+        start:
+          {Agent, :start_link,
+           [fn -> [] end, [name: {:via, Horde.Registry, {Registry.State, node()}}]]}
+      }
       # Starts a worker by calling: HordeBehavior.Worker.start_link(arg)
       # {HordeBehavior.Worker, arg}
     ]
