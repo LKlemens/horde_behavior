@@ -14,13 +14,13 @@ Repository that helps reproduce weird behaviour of `Horde.Registry`.
 - start first node
 
 ```sh
-  iex --sname node1@localhost -S mix
+  iex --sname node1@localhost --cookie foo -S mix
 ```
 
 - start second node
 
 ```sh
-  iex --sname node2@localhost -S mix
+  iex --sname node2@localhost --cookie foo -S mix
 ```
 
 - check state of registry on node1 - should be two processes - one per node
@@ -34,7 +34,7 @@ Repository that helps reproduce weird behaviour of `Horde.Registry`.
 - start third node
 
 ```sh
-  iex --sname node3@localhost -S mix
+  iex --sname node3@localhost --cookie foo -S mix
 ```
 
 - check state of registry on node1 - should be three processes but there are only two processes - first and last - the middle one disappearing
@@ -50,10 +50,10 @@ Repository that helps reproduce weird behaviour of `Horde.Registry`.
 - I checked google and I found two issues related to it, but reading that threads didn't help me :P
   But maybe I missed sth.
 
-      - https://github.com/derekkraan/horde/issues/116
-      - https://elixirforum.com/t/horde-dynamicsupervisor-bypasses-registry/49562
+  https://github.com/derekkraan/horde/issues/116  
+  https://elixirforum.com/t/horde-dynamicsupervisor-bypasses-registry/49562
 
-- I thought that processes are adding to `Horde.Registry` too fast, but adding Agents manually by command below, but it didn't helped, issue still occures.
+- I thought that processes are adding to `Horde.Registry` too fast, but adding Agents manually by command below didn't help, issue still occures.
 
 ```sh
 Agent.start_link(fn -> 553 end, name: {:via,iex(node2@localhost)1> Agent.start_link(fn -> 553 end, name: {:via, Horde.Registry, {Registry.State, node()}})
@@ -61,4 +61,4 @@ Agent.start_link(fn -> 553 end, name: {:via,iex(node2@localhost)1> Agent.start_l
 
 - That might be related to issue #65 from delta_crdt_ex
 
-      - https://github.com/derekkraan/delta_crdt_ex/issues/65
+  https://github.com/derekkraan/delta_crdt_ex/issues/65
