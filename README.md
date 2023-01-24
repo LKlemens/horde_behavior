@@ -58,3 +58,7 @@ Repository that helps reproduce weird behaviour of `Horde.Registry`.
 ```sh
 Agent.start_link(fn -> 553 end, name: {:via,iex(node2@localhost)1> Agent.start_link(fn -> 553 end, name: {:via, Horde.Registry, {Registry.State, node()}})
 ```
+
+- That might be related to issue #65 from delta_crdt_ex
+
+      - https://github.com/derekkraan/delta_crdt_ex/issues/65
